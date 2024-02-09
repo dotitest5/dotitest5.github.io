@@ -113,8 +113,8 @@ addEventListener( 'load', function() {
             if (game.frame % 20 === 0) {
 
                 /**敵キャラの作成**/
-                //enemy = new Enemy();
-                //spriteList.push( enemy );  //spriteListに敵をプッシュ
+                enemy = new Enemy();
+                spriteList.push( enemy );  //spriteListに敵をプッシュ
 
             }
 
@@ -128,13 +128,13 @@ addEventListener( 'load', function() {
             this.addEventListener( 'touchstart', hitABullet );
 
             //スプライトの足の位置で***
-            /**
+            
             spriteList.sort( function( _spriteA, _spriteB ) {
                 if ( _spriteA.y + _spriteA.height > _spriteB.y + _spriteB.height ) return 1;
                 if ( _spriteA.y + _spriteA.height < _spriteB.y + _spriteB.height ) return -1;
                 return 0;
             } );
-            */
+            
 
             /**プレイヤーや敵などのスプライトを表示する**/
             for(var i=0; i<spriteList.length; ++i) {
@@ -142,14 +142,14 @@ addEventListener( 'load', function() {
             }
 
             /*プレイヤーのHPを表示**/
-            //hpLabel.text = 'HP : ' + player.hp;
-            hpLabel.text = player.age;
+            hpLabel.text = 'HP : ' + player.hp;
+            //hpLabel.text = player.age;
             scene.addChild( hpLabel );
 
             /**スコアを表示**/
-            //scoreLabel.text = 'SCORE : ' + score;
-            //scoreLabel.y = 30;
-            //scene.addChild( scoreLabel );
+            scoreLabel.text = 'SCORE : ' + score;
+            scoreLabel.y = 30;
+            scene.addChild( scoreLabel );
 
             /**プレイヤーのHPが0未満ならばシーンを切り替える**/
             if ( player.hp <= 0 ) game.pushScene( game.gameOverScene() );
@@ -354,8 +354,8 @@ var Player = Class.create( Sprite, {
                 if ( sprite === this ) continue;
                 if ( sprite === bullet ) continue;
                 if ( this.within( sprite, 20 ) ) {
-                    //this.moveTo( 60, 180 );
-                    //this.hp--;  //プレイヤーのHPから1ずつ引いていく
+                    this.moveTo( 60, 180 );
+                    this.hp--;  //プレイヤーのHPから1ずつ引いていく
                     this.unrivaledTime = 30  //無敵時間
                 }
             }
@@ -372,11 +372,11 @@ var Enemy = Class.create( Sprite, {
         Sprite.call( this, 38, 47 );  //Spriteクラスのメソッドを、thisでも使えるようにする
         this.image = game.assets[ 'img/character/enemy.png' ];  //スプライトの画像ファイルを指定
         var rnd = Math.random() * ( 170 );  //0〜169までのランダムな数値を作成
-        this.moveTo( 200, 100 );  //敵キャラの初期位置
+        this.moveTo( 200, rnd + 100 );  //敵キャラの初期位置
     },
     onenterframe: function() {
         //敵キャラの移動  X軸
-        //this.x = this.x - 1;
+        this.x = this.x - 1;
 
         //敵キャラの移動　Y軸
         //this.y = this.y + 1;
@@ -392,9 +392,9 @@ var Enemy = Class.create( Sprite, {
 
         /**敵キャラのジグザグアニメーション**/
         if (this.age%200 < 100) {
-            //this.y = this.y + 1.5;
+              this.y = this.y + 1.5;
         }else {
-            //this.y = this.y - 1.5;
+              this.y = this.y - 1.5;
         }
 
         /**敵のX座標が-50以下になったり、存在が0になったら削除**/
